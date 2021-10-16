@@ -1,21 +1,10 @@
-#! /usr/bin/python373all
+#!/usr/bin/python37all
 
-import RPi.GPIO as GPIO
+# Save file as /usr/lib/cgi-bin/test.py
 
-pin = 14
-
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(pin, GPIO.IN)
-
-print("Content-type: text/html\n\n")
-print('<html><body><font color = red'>')
-
-
-print('GPIO pin % is: ' %pin, end = '')
-if GPIO.input(pin):
-  print("HIGH")
-else:
-  print("LOW")
-
+print('Content-type:text/html\n\n’)
+print('<html><body>')
+print('<form action="/cgi-bin/test.py" method="POST"')
+print('<input type="submit" value="create a new page">')
+print('</form>')
 print('</body></html>')
