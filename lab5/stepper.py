@@ -68,7 +68,7 @@ class Stepper:
     # and thus reports a current angle of the arm that considers the LED to
     # be at zero.
     def angle(self):
-        return (theta+180)%360
+        return (self.theta+180)%360
 
         
     # given an angle, determines the nearest direction for the arm to
@@ -78,7 +78,7 @@ class Stepper:
       # class considers LED to be at 180. If current angle < 180, return
       # 1 to turn arm cw, otherwise -1 to turn arm ccw.
 
-      if 180 - dir > 0: dir = 1
+      if 180 - angle > 0: dir = 1
       else: dir = -1
 
       return dir
@@ -89,7 +89,7 @@ class Stepper:
       angle = (angle+180) % 360 
 
       # find nearest turning direction and number of degrees to turn
-      dir = nearest(angle) 
+      dir = self.nearest(angle) 
       angle = abs(float(angle-self.theta))
 
       # # 8 half-steps per cycle, 8 cycles per revolution, into a 1:64 gearbox = half-steps per full revolusion 
@@ -103,25 +103,32 @@ class Stepper:
       noSteps = int(angle/stepAngle)
 
       # move that many steps in the nearest direction.
-      moveSteps(noSteps, dir)
+      self.moveSteps(noSteps, dir)
 
       
 
 
-    def zero(self, dir):
+    def zero(self):
         GPIO.output(self.pins[4], 1)       # turn on LED
+        self.delay_us(3000)
         calibration = self.pcf.read(0)     # take a reference reading
-        dir = nearest(0)                   # find nearest direction to 0
         
-        # turn until photocell registers a change 
-        while (abs(calibration-self.pcf.read(0)) < 5):
-          halfstep(dir)
+        print("calibration: {}".format(calibration))
+        
+        dir = self.nearest(0)                   # find nearest direction to 0
+        
+        # turn until photocell registers a change
+        read = calibration
+        while (abs(calibration-read) < 4):
+            print("measured: {}  Cali: {} diff: {}".format(read,calibration,abs(calibration-read))) 
+            self.halfstep(dir)
+            read = self.pcf.read(0)
 
         # if the value of the photocell DECREASES, it means the arm was covering the photocell when this command was entered, and moving has just uncovered it; the direction needs to be reversed.
         if self.pcf.read(0) < calibration: dir += -1
         
         # rotates the cardboard one half-cardboard width to center it in front of the LED
-        movesteps(HALF_ANGLE, dir)
+        self.moveSteps(HALF_ANGLE, dir)
 
         # resets internal angle.
         self.theta = 180
