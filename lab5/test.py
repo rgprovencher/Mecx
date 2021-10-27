@@ -33,7 +33,7 @@ pcf = PCF8591(0x48)
 
 # Stepper test
 
-step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
+# step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
 
 # # CW & CCW test
 # try:
@@ -94,7 +94,38 @@ step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
 #     step.halfstep(dir)
 #     if
 
-print(61%360)
-    
+
+def flash():
+    for i in range (3):
+        GPIO.output(LED, 1)
+        time.sleep(.1)
+        GPIO.output(LED, 0)
+        time.sleep(.1)
+    time.sleep(.5)
+
+step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
+
+print("step 1 angle: {}".format(step.angle()))
+flash()
+flash()
+
+step.goAngle(90)
+print("step 2 (90) angle: {}".format(step.angle()))
+flash()
+step.goAngle(180)
+print("step 3 (180) angle: {}".format(step.angle()))
+flash()
+print("step 4 (-90) angle: {}".format(step.angle()))
+step.goAngle(-90)
+flash()
+print("zero angle: {}".format(step.angle()))
+step.zero()
+flash()
+flash()
+
+
+
+
 
 GPIO.cleanup()
+
