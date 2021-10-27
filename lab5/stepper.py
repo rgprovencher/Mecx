@@ -52,7 +52,14 @@ class Stepper:
         
         #print("{} ".format(self.state), end='')
             
-        self.delay_us(2500)        
+        self.delay_us(2500)
+
+        # 8 half-steps per cycle, 8 cycles per revolution, into a 1:64 gearbox = half-steps per full revolusion 
+        # # 360 degrees per rev  /  no. of half-steps pre rev = degrees per half-step
+        # = 0.0879 deg; 
+        stepAngle = 0.0879 
+
+        self.theta += dir*stepAngle       
         
         
     def moveSteps(self, steps, dir):
@@ -88,23 +95,11 @@ class Stepper:
       # adds 180 to input angle bc to user, LED is at 0; to class LED is at 180.
       angle = (angle+180) % 360 
 
-      # find nearest turning direction and number of degrees to turn
+      # find nearest turning direction 
       dir = self.nearest(angle) 
-      angle = abs(float(angle-self.theta))
-
-      # # 8 half-steps per cycle, 8 cycles per revolution, into a 1:64 gearbox = half-steps per full revolusion 
-      # stepAngle = 8*8*64
-      # # 360 degrees per rev  /  no. of half-steps pre rev = degrees per half-step
-      # stepAngle = float(360)/float(stepAngle)
-      # = 0.0879 deg; no need to calculate that every time.
-      stepAngle = 0.0879
-
-      # calculate number of half-steps to turn
-      noSteps = int(angle/stepAngle)
-
-      # move that many steps in the nearest direction.
-      self.moveSteps(noSteps, dir)
-
+      
+      while abs(self.theta-angle) > 1:
+        self.halfstep(dir)
       
 
 
