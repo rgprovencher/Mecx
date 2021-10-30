@@ -105,27 +105,47 @@ def flash():
 
 step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
 
-print("step 1 angle: {}".format(step.angle()))
-flash()
-flash()
 
-step.goAngle(90)
-print("step 2 (90) angle: {}".format(step.angle()))
-flash()
-step.goAngle(180)
-print("step 3 (180) angle: {}".format(step.angle()))
-flash()
-print("step 4 (-90) angle: {}".format(step.angle()))
-step.goAngle(-90)
-flash()
-print("zero angle: {}".format(step.angle()))
+step.goAngle(270)
+print("270: {}".format(step.angle()))
+time.sleep(.5)
+step.goAngle(315)
+print("315: {}".format(step.angle()))
+time.sleep(.5)
+step.goAngle(355)
+print("355: {}".format(step.angle()))
+time.sleep(.5)
+step.goAngle(45)
+print("45: {}".format(step.angle()))
+time.sleep(.5)
+step.goAngle(5)
+print("5: {}".format(step.angle()))
+time.sleep(.5)
 step.zero()
-flash()
-flash()
+time.sleep(.5)
+step.goAngle(-90)
+print("-90 (270): {}".format(step.angle()))
+time.sleep(.5)
+step.goAngle(330)
+print("330 (330): {}".format(step.angle()))
+time.sleep(.5)
 
 
-
-
+# q = 'ok'
+# th = 45
+# print(th)
+# while q != -100:
+# 
+#     q = int(input())
+#     a = th-q
+#     b = abs(th-q)
+#     c = (th-q)%360
+#     d = a < 0
+#     e = b < 180
+#     f = c < 180
+#     print("{}  {}  {}".format(a,b,c))
+#     print("{}  {}  {}".format(d,e,f))
+#     
 
 GPIO.cleanup()
 

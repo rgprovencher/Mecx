@@ -26,7 +26,7 @@ class Stepper:
 
         # defines the current angle of the cardboard arm, with the LED at 180.
         # initialized to an arbitrary value, then calibrated with an initial zero() call to start at 180 (covering the LED).
-        self.theta = 90
+        self.theta = 90.0
         self.zero()
        
 
@@ -59,7 +59,8 @@ class Stepper:
         # = 0.0879 deg; 
         stepAngle = 0.0879 
 
-        self.theta += dir*stepAngle       
+        self.theta += dir*stepAngle
+        self.theta = self.theta % 360.0
         
         
     def moveSteps(self, steps, dir):
@@ -82,46 +83,52 @@ class Stepper:
     # turn. Returns +1 for ccw, -1 for cw.
     def nearest(self, angle):
       
-      # class considers LED to be at 180. If current angle < 180, return
-      # 1 to turn arm cw, otherwise -1 to turn arm ccw.
-
-      if 180 - angle > 0: dir = 1
-      else: dir = -1
+      if (self.theta - angle)%360 < 180: dir = -1
+      else: dir = 1
 
       return dir
 
+    # gien an angle, rotates the cardboard arm to that angle.
     def goAngle(self, angle):
       # short circuits any clever clogs who want to type in out of range angles.
       # adds 180 to input angle bc to user, LED is at 0; to class LED is at 180.
-      angle = (angle+180) % 360 
+      angle = float((angle+180) % 360 )
 
       # find nearest turning direction 
       dir = self.nearest(angle) 
       
-      while abs(self.theta-angle) > 1:
+      while abs(self.theta-angle) > .1:
         self.halfstep(dir)
+        # print("angle:  {} theta: {} diff: {}".format(angle, self.theta, abs(self.theta-angle)))
       
 
-
+    # Uses an optical sensor to return the cardboard arm to the zero position
     def zero(self):
+#         print("zero(), led on")
         GPIO.output(self.pins[4], 1)       # turn on LED
-        self.delay_us(3000)
+        self.delay_us(500000)               # pause to let LED fully illum before taking reading
         calibration = self.pcf.read(0)     # take a reference reading
         
-        print("calibration: {}".format(calibration))
+#         print("calibration: {}".format(calibration))
         
         dir = self.nearest(0)                   # find nearest direction to 0
         
         # turn until photocell registers a change
         read = calibration
-        while (abs(calibration-read) < 4):
-            print("measured: {}  Cali: {} diff: {}".format(read,calibration,abs(calibration-read))) 
+        while (abs(calibration-read) < 10):
+            
             self.halfstep(dir)
+            
             read = self.pcf.read(0)
+            
+            #print("measured: {}  Cali: {} diff: {}".format(read,calibration,abs(calibration-read))) 
+
 
         # if the value of the photocell DECREASES, it means the arm was covering the photocell when this command was entered, and moving has just uncovered it; the direction needs to be reversed.
-        if self.pcf.read(0) < calibration: dir += -1
-        
+        if self.pcf.read(0) < calibration:
+            # print("exposed the led, reversing")
+            dir *= -1
+            
         # rotates the cardboard one half-cardboard width to center it in front of the LED
         self.moveSteps(HALF_ANGLE, dir)
 
