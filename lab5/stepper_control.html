@@ -1,0 +1,15 @@
+<html>
+<br>
+<br>
+<form action = "cgi-bin/lab5/stepper_control.py" method = "POST">
+    <input type="hidden" name="reset" value="0">
+    <input type="text" name="angle">
+</form>    
+<br>
+<form action = "cgi-bin/lab5/stepper_control.cgi" method = "POST">
+    <input type="hidden" name="reset" value="1">
+    <input type="hidden" name="angle" value="0">
+    <input type="submit" value="Reset arm to 0">
+</form>
+
+</html>
