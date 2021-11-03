@@ -15,6 +15,8 @@ Stepper_3 = 19
 
 pcf = PCF8591(0x48)
 
+step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
+
 # pins = [LED, Stepper_1, Stepper_2, Stepper_3, Stepper_0]
 # 
 # for pin in pins:
@@ -103,32 +105,32 @@ def flash():
         time.sleep(.1)
     time.sleep(.5)
 
-step = Stepper(Stepper_0, Stepper_1, Stepper_2, Stepper_3, LED, pcf)
 
 
-step.goAngle(270)
-print("270: {}".format(step.angle()))
-time.sleep(.5)
-step.goAngle(315)
-print("315: {}".format(step.angle()))
-time.sleep(.5)
-step.goAngle(355)
-print("355: {}".format(step.angle()))
-time.sleep(.5)
-step.goAngle(45)
-print("45: {}".format(step.angle()))
-time.sleep(.5)
-step.goAngle(5)
-print("5: {}".format(step.angle()))
-time.sleep(.5)
-step.zero()
-time.sleep(.5)
-step.goAngle(-90)
-print("-90 (270): {}".format(step.angle()))
-time.sleep(.5)
-step.goAngle(330)
-print("330 (330): {}".format(step.angle()))
-time.sleep(.5)
+# 
+# step.goAngle(270)
+# print("270: {}".format(step.angle()))
+# time.sleep(.5)
+# step.goAngle(315)
+# print("315: {}".format(step.angle()))
+# time.sleep(.5)
+# step.goAngle(355)
+# print("355: {}".format(step.angle()))
+# time.sleep(.5)
+# step.goAngle(45)
+# print("45: {}".format(step.angle()))
+# time.sleep(.5)
+# step.goAngle(5)
+# print("5: {}".format(step.angle()))
+# time.sleep(.5)
+# step.zero()
+# time.sleep(.5)
+# step.goAngle(-90)
+# print("-90 (270): {}".format(step.angle()))
+# time.sleep(.5)
+# step.goAngle(330)
+# print("330 (330): {}".format(step.angle()))
+# time.sleep(.5)
 
 
 # q = 'ok'
@@ -146,6 +148,13 @@ time.sleep(.5)
 #     print("{}  {}  {}".format(a,b,c))
 #     print("{}  {}  {}".format(d,e,f))
 #     
+
+step.zero()
+print(step.angle())
+step.goAngle(40)
+print(step.angle())
+step.zero()
+
 
 GPIO.cleanup()
 
