@@ -61,35 +61,3 @@ print("""Content-type: text/html\n\n
 
 """)
 
-
-# 
-# 
-# 
-# 
-# print("""Content-type: text/html\n\n
-# <html>
-#     <form action = "/cgi-bin/lab5/stepper_control.py" method = "POST">
-#         <input type="hidden" name="reset" value="0">
-#         <input type="text" name="angle"> <br>
-#         <input type="submit" value="set angle">
-#     </form>    
-#     <br>
-#     <form action = "/cgi-bin/lab5/stepper_control.py" method = "POST">
-#         <input type="hidden" name="reset" value="1">
-#         <input type="hidden" name="angle" value="0">
-#         <input type="submit" value="Reset arm to 0">
-#     </form>
-#  </html>
-# 
-# """)   
-#     
-# #     <iframe width="450" height="260" style="border: 1px solid #cccccc;" 
-# #     src="https://thingspeak.com/channels/1554792/charts/1?
-# #     api_key=IBBYTWGOFS0P1EQ7&
-# #     bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Angle&
-# #     type=line&yaxismax=359&yaxismin=0"></iframe>
-# #     
-# #     <iframe width="450" height="260" style="border: 1px solid #cccccc;" 
-# #     src="https://thingspeak.com/channels/1554792/widgets/374774"></iframe>
-# # 
-# # 
